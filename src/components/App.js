@@ -1,20 +1,23 @@
 import React from 'react';
-import axios from 'axios';
 import AddressSearch from './AddressSearch';
 import InforInput from './InforInput';
 
 class App extends React.Component {
     state = {balance: ''};
 
-    onSearchSubmit=  async(term) =>{
-        const response = await axios.get(`https://api.blockcypher.com/v1/btc/main/addrs/${term}/balance`);
-        this.setState({ balance: response.data.balance});
+    onSearchSubmit = (term) => {
+     fetch(`http://localhost:9000/balancesearch?address=${term}`)
+     .then(res => res.json())
+     .then(res=> this.setState({ balance: res.balance}))
+     .catch(err => console.log(err));
     }
 
-    onTransactionSubmit = async(newtx) =>{
-        const response = await axios.post('https://api.blockcypher.com/v1/bcy/test/txs/new', JSON.stringify(newtx));
-        console.log(response);
-    }
+    onTransactionSubmit = (inputAdd, outputAdd, value) => {
+        fetch(`http://localhost:9000/transaction?inputAdd=${inputAdd}&outputAdd=${outputAdd}&value=${value}`)
+        .then(res => res.json())
+        .then(res=> console.log(res))
+        .catch(err => console.log(err));
+    }   
 
     render(){
         return (

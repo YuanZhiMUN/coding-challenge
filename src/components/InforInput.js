@@ -10,10 +10,6 @@ class InforInput extends React.Component {
 
     onFormSubmit = (event) => {
         event.preventDefault();
-        // var newtx = { inputs: [{addresses: [`${this.state.inputAdd}`]}],
-        //     outputs: [{addresses: [`${this.state.outputAdd}`], 
-        //     value: 100000}]
-        //   };
         this.props.onSubmit(this.state.inputAdd, this.state.outputAdd, this.state.value);
     };
 

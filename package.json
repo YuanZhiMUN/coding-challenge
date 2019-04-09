@@ -4,11 +4,13 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "chart.js": "^1.1.1",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "mysql": "^2.16.0",
     "path": "^0.12.7",
     "react": "^16.8.6",
+    "react-chartjs": "^1.2.0",
     "react-dom": "^16.8.6",
     "react-scripts": "2.1.8"
   },

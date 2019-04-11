@@ -5,6 +5,7 @@ import MyBarChart from './MyBarChart';
 
 class App extends React.Component {
     state = {balance: '',
+            showBalance: false,
             outputValues: [],
             outputAddress: [],
             show: false
@@ -13,7 +14,9 @@ class App extends React.Component {
     onSearchSubmit = (term) => {
      fetch(`http://localhost:9000/balancesearch?address=${term}`)
      .then(res => res.json())
-     .then(res=> this.setState({ balance: res.balance}))
+     .then(res=> this.setState({ balance: res.balance,
+                                 showBalance: true}
+            ))
      .catch(err => console.log(err));
     }
 
@@ -33,14 +36,16 @@ class App extends React.Component {
 
     render(){
         const show = this.state.show;
+        const showBalance = this.state.showBalance;
+
         return (
             <div className="ui container" style={{ marginTop: '10px'}}>
                 <div className="ui container" style={{ marginTop: '10px'}}>
                     <AddressSearch onSubmit={this.onSearchSubmit}/>
                 </div>
-                <div>
+                {showBalance?<div>
                     The balance is: {this.state.balance}
-                </div>
+                </div>: null}
 
                 <div className="ui container" style={{ marginTop: '10px'}}>
                     <InforInput onSubmit={this.onTransactionSubmit}/>

@@ -4,21 +4,25 @@ const mysql = require('mysql');
 const app = express();
 var cors = require('cors')
 const axios = require('axios');
-const SAVA_ALL = "";
 
-app.use(cors());
-const connection = mysql.createConnection({
+//create connection
+const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Yz081221@',
-    database: 'coding'
+    password: '******', 
+    database: '******'
 });
 
-connection.connect(err => {
+//Create
+db.connect(err => {
     if(err){
-        return err;
+        console.log("err is : ", err);
+    }else{
+    console.log('MySql connected...');
     }
 });
+
+app.use(cors());
 
 app.get('/balancesearch', (req, res) => {
     const {address} = req.query;
@@ -38,21 +42,18 @@ app.get('/transaction', (req, res) => {
     
     axios.post('https://api.blockcypher.com/v1/bcy/test/txs/new', JSON.stringify(newtx)).then(results=>
         {
+            const INSERT_DATA = `INSERT INTO transaction (Total, Fees, Size) VALUES(${results.data.tx.total}, ${results.data.tx.fees}, ${results.data.tx.size})`;
+            db.query(INSERT_DATA, (err, results) => {
+                if (err){
+                    console.log("Insert data wrong", err);
+                }
+                console.log('Insert data successfully');
+            });
             return res.json({data: results.data});
         }
     );
  });
 
-app.get('/', (req, res) => {
-     res.send("from server side");
- });
-//app.get('/', function(req, res) {
-  //res.sendFile(path.join(__dirname, 'build', 'index.html'));
-//});
-// app.get('/', (req, res)=>{
-//     res.send('Hello from the server side');
-// });
-
 app.listen(9000, () => {
-    console.log('Good');
+    console.log('The server is on port 9000');
 });

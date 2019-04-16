@@ -5,15 +5,14 @@ const app = express();
 var cors = require('cors')
 const axios = require('axios');
 
-//create connection
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '******', 
-    database: '******'
+    password: '*****', 
+    database: '*****'
 });
 
-//Create
+//Create connection
 db.connect(err => {
     if(err){
         console.log("err is : ", err);
@@ -43,6 +42,14 @@ app.get('/transaction', (req, res) => {
     axios.post('https://api.blockcypher.com/v1/bcy/test/txs/new', JSON.stringify(newtx)).then(results=>
         {
             const INSERT_DATA = `INSERT INTO transaction (Total, Fees, Size) VALUES(${results.data.tx.total}, ${results.data.tx.fees}, ${results.data.tx.size})`;
+            const CREATE_DATA = 'CREATE TABLE IF NOT EXISTS transaction (Total int(12) NOT NULL, Fees int(12) NOT NULL, Size int(12) NOT NULL)';
+            db.query(CREATE_DATA, (err, results) => {
+                if(err){
+                    console.log("Fail to create the table", err);
+                }
+                console.log('Create the table successfully');
+            });
+
             db.query(INSERT_DATA, (err, results) => {
                 if (err){
                     console.log("Insert data wrong", err);
